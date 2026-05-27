@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+set -e
+
+npm init -y
 npm i -D vite tailwindcss @tailwindcss/vite vite-plugin-handlebars fast-glob
-npm i alpinejs
+npm i alpinejs lucide swiper gsap
 
 cat <<'EOF' > ./vite.config.js
 import { defineConfig } from 'vite'
@@ -41,33 +44,50 @@ export default defineConfig({
 })
 EOF
 
-mkdir -p ./src/js
+mkdir -p \
+  ./imgs \
+  ./partials \
+  ./src/js/swiper \
+  ./src/js/lucide \
+  ./src/js/alpinejs \
+  ./src/js/gsap \
+  ./src/css
 
 cat <<'EOF' > ./src/js/app.js
 import "../css/app.css";
+import "./alpinejs/alpine.js";
+import "./lucide/lucideIcons.js";
+EOF
+
+cat <<'EOF' > ./src/js/alpinejs/alpine.js
 import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 Alpine.start();
 EOF
 
-mkdir -p ./src/css
+cat <<'EOF' > ./src/js/lucide/lucideIcons.js
+import { createIcons, Phone, Mail } from "lucide";
 
-cat <<'EOF' > ./src/css/app.css
-@import "tailwindcss";
+createIcons({
+  icons: {
+    Phone,
+    Mail,
+  },
+});
 EOF
 
-mkdir -p ./src/partials
+printf '@import "tailwindcss";\n' > ./src/css/app.css
 
-cat <<'EOF' > ./src/partials/header.hbs
+cat <<'EOF' > ./partials/header.hbs
 <header></header>
 EOF
 
-cat <<'EOF' > ./src/partials/footer.hbs
+cat <<'EOF' > ./partials/footer.hbs
 <footer></footer>
 EOF
 
-cat <<'EOF' > ./src/partials/head.hbs
+cat <<'EOF' > ./partials/head.hbs
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <script type="module" src="/src/js/app.js"></script>
@@ -88,7 +108,7 @@ cat <<'EOF' > ./index.html
 </html>
 EOF
 
-cat <<'EOF' > ./second.html
+cat <<'EOF' > ./sample.html
 <!doctype html>
 <html lang="ja">
   <head>
@@ -96,7 +116,7 @@ cat <<'EOF' > ./second.html
   </head>
   <body>
     {{> header}}
-    <main>this is second page</main>
+    <main>this is sample page</main>
     {{> footer}}
   </body>
 </html>
