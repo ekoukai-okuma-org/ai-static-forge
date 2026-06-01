@@ -14,7 +14,12 @@ import fg from 'fast-glob'
 import handlebars from 'vite-plugin-handlebars'
 
 const htmlFiles = fg.sync(['*.html', '**/*.html'], {
-  ignore: ['dist/**', 'node_modules/**'],
+  ignore: [
+    'dist/**',
+    'node_modules/**',
+    'partials/**',
+    'src/**',
+  ],
 })
 
 const input = Object.fromEntries(
@@ -77,18 +82,11 @@ createIcons({
 });
 EOF
 
-printf '@import "tailwindcss";\n' > ./src/css/app.css
-cat <<'EOF' > ./tailwind.config.js
+cat <<'EOF' > ./src/css/app.css
 @import "tailwindcss";
 
 @theme{
-  --font-base : "Helvetica Neue",
-    Arial,
-    "Hiragino Kaku Gothic ProN",
-    "Hiragino Sans",
-    "Noto Sans JP",
-    sans-serif;
-
+  --font-base : "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif;
 }
 EOF
 
