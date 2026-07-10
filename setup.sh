@@ -35,10 +35,16 @@ const input = Object.fromEntries(
 )
 
 export default defineConfig({
+  base: './',
   plugins: [
     tailwindcss(),
     handlebars({
       partialDirectory: resolve(__dirname, './partials'),
+      context(pagePath) {
+        const clean = pagePath.replace(/^\//, '')
+        const depth = clean.split('/').length - 1
+        return { root: depth > 0 ? '../'.repeat(depth) : './' }
+      },
     }),
   ],
   build: {
@@ -106,7 +112,7 @@ EOF
 cat <<'EOF' > ./partials/head.hbs
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<script type="module" src="/src/js/app.js"></script>
+<script type="module" src="{{root}}src/js/app.js"></script>
 <title>vite_tailwind_alpine</title>
 EOF
 
